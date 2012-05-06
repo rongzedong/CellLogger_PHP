@@ -57,7 +57,7 @@ class aaa_api {
                 'approved'      => 0,
             );
 
-            $res = $rdao->set('', $inf);    
+            $res = $rdao->add($inf);    
 
             if($res) {
                 $status['success'] += 1;
