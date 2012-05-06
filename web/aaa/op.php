@@ -4,13 +4,37 @@ require_once 'config.php';
 
 $status   = '--';
 $next     = '';
-$autojump = '';
+$autojump = '1';
+
+if(!empty($_REQUEST['next'])) {
+    $next = $_REQUEST['next'];
+}
+
+
+function x_approve($approve) {
+
+    $item = $_POST['checkitem']; 
+    $station_ids = array();
+    foreach($item as $id) {
+        $re = dao_record::getInstance()->get($id);
+        $station_id = $re['station_id'];
+        $station_ids[] = $station_id;
+
+        dao_record::getInstance()->approve($id, $approve);
+
+    }
+
+    $station_ids = array_unique($station_ids);
+
+    foreach($station_ids as $station_id) {
+        dao_station::getInstance()->updateCell($station_id);
+    }
+
+}
 
 switch($_POST['action']) {
     case 'r-delete':
         $status = 'record delete ';
-        $next = 'record.php';
-        $autojump = 1;
         $item = $_POST['checkitem']; 
         foreach($item as $id) {
             dao_record::getInstance()->delete($id);
@@ -19,22 +43,16 @@ switch($_POST['action']) {
 
     case 'r-approve':
         $status = 'record approve ';
-        $next = 'record.php';
-        $autojump = 1;
-        $item = $_POST['checkitem']; 
-        foreach($item as $id) {
-            dao_record::getInstance()->approve($id, true);
-        }
+
+        x_approve(true);
+
         break;
        
     case 'r-decline':
         $status = 'record decline ';
-        $next = 'record.php';
-        $autojump = 1;
-        $item = $_POST['checkitem']; 
-        foreach($item as $id) {
-            dao_record::getInstance()->approve($id, false);
-        }
+
+        x_approve(false);
+
         break;
 
 

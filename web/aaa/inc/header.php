@@ -102,6 +102,14 @@ th {
     margin: 0 4px;
 }
 
+.approved-1 {
+    background-color: #cfc;
+}
+
+.approved-2 {
+    background-color: #fcc;
+}
+
 /* }}} */
 </style>
 

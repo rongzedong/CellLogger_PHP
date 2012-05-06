@@ -37,7 +37,7 @@ class dao_record extends dao_base {
         $limit = intval($limit);
 
         $mysqli = $this->getMysqli();
-        $sql = "SELECT * FROM `".self::TABLE."` "
+        $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `".self::TABLE."` "
             . " ORDER BY `time_upload`,`seq` DESC "
             . " LIMIT $offset, $limit ";
 
@@ -54,7 +54,23 @@ class dao_record extends dao_base {
 
         }
 
-        return $list;
+        $sql = "SELECT FOUND_ROWS() AS found_rows";
+        $result = $mysqli->query($sql);
+        $row = null;
+        if($result){
+            $row = $result->fetch_assoc();
+            $total = intval($row['found_rows']);
+            $result->free();
+        }
+
+        $result = array(
+            'offset' => $offset,
+            'limit'  => $limit,
+            'total'  => $total,
+            'list'   => $list,
+        );
+
+        return $result;
     }
 
     public function add($row){
@@ -87,7 +103,7 @@ class dao_record extends dao_base {
             . " ('".$mysqli->real_escape_string($id)."', ".$sqlInsertValues.", UNIX_TIMESTAMP() ) "
             . " ON DUPLICATE KEY UPDATE "
             . " ".$sqlUpdate." `time_upload` = UNIX_TIMESTAMP() ";
-        
+
         util_log::d(__METHOD__ . ' ' . $sql);
         $res = $mysqli->query($sql);
 
@@ -115,7 +131,7 @@ class dao_record extends dao_base {
             . " SET ".$sqlUpdate.", `time_update` = UNIX_TIMESTAMP() "
             . " WHERE `id` = ".$mysqli->real_escape_string($id)." "
             . " LIMIT 1 ";
-        
+
         util_log::d(__METHOD__ . ' ' . $sql);
         $res = $mysqli->query($sql);
 
@@ -141,7 +157,7 @@ class dao_record extends dao_base {
         if($approve) {
             $inf['approved'] = 1;
         } else {
-            $inf['approved'] = 0;
+            $inf['approved'] = 2;
         }
 
         return $this->set($id, $inf);

@@ -11,13 +11,17 @@ $page = intval($page);
 $limit = 20;
 $offset = ( $page - 1 ) * $limit;
 
-$list = dao_record::getInstance()->getList($offset, $limit);
+$res = dao_record::getInstance()->getList($offset, $limit);
+$total_page = ceil( $res['total'] / $limit );
+$list = $res['list'];
+
 
 ?>
 
 <div>
 
 <form id="frm-batch" name="frm-batch" method="post" action="op.php">
+<input type="hidden" name="next" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" />
     <input type="hidden" id="batch-action" name="action" value="" />
 
 <div class="type">
@@ -72,7 +76,7 @@ $list = dao_record::getInstance()->getList($offset, $limit);
     <td class="rr"><?php echo $row['signal_strength'];                  ?></td>
     <td class=""  ><?php echo date('Y-m-d H:i:s', $row['time']);        ?></td>
     <td class=""  ><?php echo date('Y-m-d H:i:s', $row['time_upload']); ?></td>
-    <td class=""  ><?php echo $row['approved'];                         ?></td>
+    <td class="approved-<?php echo $row['approved']; ?>"  ><?php echo $row['approved'];                         ?></td>
 </tr>
 
 <?php } ?>

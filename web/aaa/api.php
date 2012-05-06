@@ -79,20 +79,35 @@ class aaa_api {
 
         $version = 1;
         $stations = array();
-        $stations[] = array(
-            'id' => 10,
-            'name' => 'test10',
-            'cells' => array(
-                array(
-                    'lac' => 101,
-                    'cid' => 102,
-                ), 
-                array(
-                    'lac' => 103,
-                    'cid' => 104,
-                ), 
-            ),
-        );
+        $version = 0;
+
+        $list = dao_station::getInstance()->getList(0, 9999);
+        $s = array();
+        foreach($list as $r) {
+            $id = $r['station_id'];
+            if(!isset($s[$id])) {
+                $s[$id] = array(
+                    'id'    => intval($id),
+                    'name'  => 'station-' . $id,
+                    'cells' => array(),
+                );
+            }
+
+            $s[$id]['cells'][] = array(
+                'lac' => intval($r['lac']),
+                'cid' => intval($r['cid']),
+            );
+
+            $v = intval($r['time_create']);
+            if($v > $version) {
+                $version = $v;
+            }
+
+        }
+
+        
+         
+        $stations = array_values($s);
 
         return $this->ok(array(
             'version' => $version,
