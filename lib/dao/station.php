@@ -128,7 +128,7 @@ class dao_station extends dao_base {
         $mysqli = $this->getMysqli();
 
         $sql = "INSERT INTO `".self::TABLE."` "
-            . " (`station_id`, `cid`, `lac`, `time_create`) "
+            . " (`station_id`, `lac`, `cid`, `time_create`) "
             . " VALUES "
             . " ('".$mysqli->real_escape_string($station_id)."','".$mysqli->real_escape_string($lac)."','".$mysqli->real_escape_string($cid)."', UNIX_TIMESTAMP() ) ";
 
