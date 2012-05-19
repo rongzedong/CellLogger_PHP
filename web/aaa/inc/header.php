@@ -22,7 +22,7 @@ if(isset($title)) {
 * {
     font-size: 14px;
     color: #333;
-    font-family: arial,sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 a  {

@@ -12,6 +12,57 @@ class dao_station extends dao_base {
         return self::$_instance;
     }
 
+
+    public function getAllStation($cache = true){
+
+        $list = array();
+        $cache_file = '/tmp/cl-cache.station.php';
+        if($cache and file_exists($cache_file)) {
+            include $cache_file;
+            $list = $INLINE_CACHE;
+        } else {
+
+            $list = $this->getStationList(0, 9999);
+
+            $out = "<"."?php"."\n"
+                . "/"."/ gen at " . date("Y-m-d H:i:s") . "\n"
+                . "\$INLINE_CACHE = "
+                . var_export($list, true) 
+                . ";\n";
+            file_put_contents($cache_file, $out);
+        }
+
+        $ret = array(
+            'station' => array(),
+            'cell'    => array(),
+        );
+
+        foreach($list as $r) {
+            $station_id = $r['station_id'];
+            $cell_key = $r['lac'].':'.$r['cid'];
+
+            if(!isset($ret['station'][$station_id])) {
+                $ret['station'][$station_id] = array(
+                    'cell' => array(),
+                );
+            } 
+            $ret['station'][$station_id]['cell'][] = array(
+                'key' => $cell_key,
+                'lac' => $r['lac'],
+                'cid' => $r['cid'],
+            );
+
+            if(!isset($ret['cell'][$cell_key])) {
+                $ret['cell'][$cell_key] = array();
+            } 
+            $ret['cell'][$cell_key][] = $station_id;
+
+        }
+
+
+        return $ret;
+    }
+
     public function updateCell($station_id) {
 
         $mysqli = $this->getMysqli();
@@ -75,8 +126,7 @@ class dao_station extends dao_base {
         $limit = intval($limit);
 
         $mysqli = $this->getMysqli();
-        $sql = "SELECT COUNT(*) AS cell_count, * FROM `".self::TABLE."` "
-            . " GROUP BY `station_id` "
+        $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `".self::TABLE."` "
             . " ORDER BY `station_id` ASC "
             . " LIMIT $offset, $limit ";
 

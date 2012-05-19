@@ -30,6 +30,7 @@ function x_approve($approve) {
         dao_station::getInstance()->updateCell($station_id);
     }
 
+    dao_station::getInstance()->getAllStation(false);
 }
 
 switch($_POST['action']) {
@@ -55,6 +56,19 @@ switch($_POST['action']) {
 
         break;
 
+    case 'st-delete':
+        $status = 'delete station cell';
+
+        $station_id = $_POST['id'];
+        $lac = $_POST['lac'];
+        $cid = $_POST['cid'];
+        $status .= ' '.$lac . ':' . $cid;
+        
+        dao_station::getInstance()->delete($station_id, $lac, $cid);
+
+        dao_station::getInstance()->getAllStation(false);
+
+        break;
 
 }
 
