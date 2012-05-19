@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 06, 2012 at 10:51 PM
+-- Generation Time: May 19, 2012 at 06:00 PM
 -- Server version: 5.0.51
 -- PHP Version: 5.3.8-1~dotdeb.2
 
@@ -27,10 +27,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 CREATE TABLE IF NOT EXISTS `station_cell` (
   `station_id` int(11) NOT NULL,
-  `cid` int(11) NOT NULL,
   `lac` int(11) NOT NULL,
+  `cid` int(11) NOT NULL,
   `time_create` int(10) unsigned NOT NULL,
-  UNIQUE KEY `c` (`station_id`,`cid`,`lac`)
+  UNIQUE KEY `c` (`station_id`,`lac`,`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
