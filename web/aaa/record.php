@@ -15,8 +15,21 @@ $res = dao_record::getInstance()->getList($offset, $limit);
 $total_page = ceil( $res['total'] / $limit );
 $list = $res['list'];
 
+$station = dao_station::getInstance()->getAllStation();
 
 ?>
+
+<style type="text/css">
+.stat-new {
+    background-color: #7f7;
+}
+.stat-exist {
+    background-color: #77f;
+}
+.stat-multi {
+    background-color: #ff0;
+}
+</style>
 
 <div>
 
@@ -58,11 +71,25 @@ $list = $res['list'];
     <th>signal strength </th>
     <th>client time </th>
     <th>upload time </th>
-    <th>approved </th>
+    <th>ap </th>
+    <th>status </th>
 </tr>
 </thead>
 <tbody>
-<?php foreach($list as $row) { ?>
+<?php foreach($list as $row) { 
+
+    $stat = 'new';
+    $x_cell_key = $row['lac'].':'.$row['cid'];
+    $x_st_id = $row['station_id'];
+    if(isset($station['cell'][$x_cell_key])) {
+        if(count($station['cell'][$x_cell_key]) and in_array($x_st_id, $station['cell'][$x_cell_key])) {
+            $stat = 'exist';
+        } else {
+            $stat = 'multi';
+        }
+    }
+
+?>
 
 <tr>
 <td><input type="checkbox" name="checkitem[]" value="<?php echo $row['id']; ?>" /></td>
@@ -76,7 +103,8 @@ $list = $res['list'];
     <td class="rr"><?php echo $row['signal_strength'];                  ?></td>
     <td class=""  ><?php echo date('Y-m-d H:i:s', $row['time']);        ?></td>
     <td class=""  ><?php echo date('Y-m-d H:i:s', $row['time_upload']); ?></td>
-    <td class="approved-<?php echo $row['approved']; ?>"  ><?php echo $row['approved'];                         ?></td>
+    <td class="cc approved-<?php echo $row['approved']; ?>"  ><?php echo $row['approved'];                         ?></td>
+    <td class="cc stat-<?php echo $stat; ?>"><?php echo $stat; ?></td>
 </tr>
 
 <?php } ?>
