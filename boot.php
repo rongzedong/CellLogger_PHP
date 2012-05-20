@@ -2,7 +2,8 @@
 
 ob_start();
 
-$_SERVER['APP_ROOT'] = dirname(__FILE__);
+$_SERVER['APP_ROOT']    = dirname(__FILE__);
+$_SERVER['APP_RELEASE'] = 'dev';
 
 // set include path
 $paths = array(

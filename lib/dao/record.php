@@ -38,7 +38,7 @@ class dao_record extends dao_base {
 
         $mysqli = $this->getMysqli();
         $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `".self::TABLE."` "
-            . " ORDER BY `time_upload`,`seq` DESC "
+            . " ORDER BY `seq` DESC,  `time_upload` DESC "
             . " LIMIT $offset, $limit ";
 
         $result = $mysqli->query($sql);
@@ -100,9 +100,9 @@ class dao_record extends dao_base {
         $sql = "INSERT INTO `".self::TABLE."` "
             . " (`id`, ".$sqlInsertFields.",`time_upload`) "
             . " VALUES "
-            . " ('".$mysqli->real_escape_string($id)."', ".$sqlInsertValues.", UNIX_TIMESTAMP() ) "
+            . " ('', ".$sqlInsertValues.", UNIX_TIMESTAMP() ) "
             . " ON DUPLICATE KEY UPDATE "
-            . " ".$sqlUpdate." `time_upload` = UNIX_TIMESTAMP() ";
+            . " ".$sqlUpdate." , `time_upload` = UNIX_TIMESTAMP() ";
 
         util_log::d(__METHOD__ . ' ' . $sql);
         $res = $mysqli->query($sql);

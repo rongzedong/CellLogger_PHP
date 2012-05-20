@@ -45,6 +45,11 @@ class aaa_api {
         $rdao = dao_record::getInstance();
 
         foreach($records as $re) {
+
+            if($re['lac'] == '-1' or $re['cid'] == '-1' ) {
+                continue;
+            }
+
             $inf = array(
                 'client_id'     => $client,
                 'seq'           => $re['id'],

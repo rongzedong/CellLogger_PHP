@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 19, 2012 at 06:00 PM
+-- Generation Time: May 20, 2012 at 11:01 PM
 -- Server version: 5.0.51
 -- PHP Version: 5.3.8-1~dotdeb.2
 
@@ -54,4 +54,4 @@ CREATE TABLE IF NOT EXISTS `user_record` (
   `approved` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `record_constraint` (`client_id`,`seq`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=60 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=218 ;
