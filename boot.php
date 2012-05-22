@@ -26,3 +26,5 @@ util_log::logfile('/tmp/cl.log');
 
 // compatibility
 
+date_default_timezone_set('Asia/Shanghai');
+

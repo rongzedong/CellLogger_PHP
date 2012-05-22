@@ -38,7 +38,7 @@ class dao_record extends dao_base {
 
         $mysqli = $this->getMysqli();
         $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `".self::TABLE."` "
-            . " ORDER BY `seq` DESC,  `time_upload` DESC "
+            . " ORDER BY `time_upload` DESC "
             . " LIMIT $offset, $limit ";
 
         $result = $mysqli->query($sql);
